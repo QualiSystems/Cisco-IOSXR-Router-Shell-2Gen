@@ -1,2 +1,1 @@
-# Cisco-IOSXR-Router-Shell
-CloudShell Networking Cisco IOSXR Shell for Routers
+# Cisco-IOSXR-Router-Shell-2Gen
