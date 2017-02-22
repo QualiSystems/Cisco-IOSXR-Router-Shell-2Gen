@@ -1,2 +1,2 @@
-# Cisco-IOSXR-Switch-Shell
-CloudShell Networking Cisco IOSXR Shell for Switch
+# Cisco-IOSXR-Router-Shell
+CloudShell Networking Cisco IOSXR Shell for Routers

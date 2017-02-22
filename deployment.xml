@@ -29,7 +29,7 @@
                  <source>src</source>
             </sources>
             <!-- the driver name of the driver to update -->
-            <targetName>CiscoNXOSSwitchShellDriver_2Gen</targetName>
+            <targetName>CiscoIOSXRRouterShellDriver_2Gen</targetName>
         </driver>
     </drivers>
 
