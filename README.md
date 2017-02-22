@@ -1,2 +1,2 @@
-# Cisco-NXOS-Switch-Shell
-CloudShell Networking Cisco NXOS Shell for Switch
+# Cisco-IOSXR-Switch-Shell
+CloudShell Networking Cisco IOSXR Shell for Switch

@@ -6,7 +6,7 @@ from cloudshell.devices.driver_helper import get_logger_with_thread_id, get_api,
 from cloudshell.devices.standards.networking.configuration_attributes_structure import create_networking_resource_from_context
 from cloudshell.networking.cisco.runners.cisco_connectivity_runner import \
     CiscoConnectivityRunner as ConnectivityRunner
-from cloudshell.networking.cisco.nxos.runners.cisco_nxos_configuration_runner import \
+from cloudshell.networking.cisco.iosxr.runners.cisco_nxos_configuration_runner import \
     CiscoNXOSConfigurationRunner as ConfigurationRunner
 from cloudshell.networking.cisco.runners.cisco_autoload_runner import CiscoAutoloadRunner as AutoloadRunner
 from cloudshell.networking.cisco.runners.cisco_firmware_runner import CiscoFirmwareRunner as FirmwareRunner
@@ -17,12 +17,12 @@ from cloudshell.shell.core.driver_utils import GlobalLock
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
 
 
-class CisconxosshellDriver(ResourceDriverInterface, NetworkingResourceDriverInterface, GlobalLock):
-    SUPPORTED_OS = ["NX[ -]?OS|NXOS"]
-    SHELL_NAME = "Cisco NXOS Switch 2 Gen"
+class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriverInterface, GlobalLock):
+    SUPPORTED_OS = ["IOS[ -]?XR|IOSXR"]
+    SHELL_NAME = "Cisco IOSXR Router 2 Gen"
 
     def __init__(self):
-        super(CisconxosshellDriver, self).__init__()
+        super(CiscoIOSXRResourceDriver, self).__init__()
         self._cli = None
 
     def initialize(self, context):

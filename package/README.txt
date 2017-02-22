@@ -1,1 +1,1 @@
-CloudShell Networking Cisco NxOS specific package powered by QualiSystems
+CloudShell Networking Cisco IOSXR specific package powered by QualiSystems
