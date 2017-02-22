@@ -3,15 +3,19 @@
 
 
 from cloudshell.devices.driver_helper import get_logger_with_thread_id, get_api, get_cli
-from cloudshell.devices.standards.networking.configuration_attributes_structure import create_networking_resource_from_context
-from cloudshell.networking.cisco.runners.cisco_connectivity_runner import \
-    CiscoConnectivityRunner as ConnectivityRunner
+from cloudshell.devices.standards.networking.configuration_attributes_structure import \
+    create_networking_resource_from_context
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_connectivity_runner import \
+    CiscoIOSXRConnectivityRunner as ConnectivityRunner
 from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_configuration_runner import \
     CiscoIOSXRConfigurationRunner as ConfigurationRunner
-from cloudshell.networking.cisco.runners.cisco_autoload_runner import CiscoAutoloadRunner as AutoloadRunner
-from cloudshell.networking.cisco.runners.cisco_firmware_runner import CiscoFirmwareRunner as FirmwareRunner
-from cloudshell.networking.cisco.runners.cisco_run_command_runner import CiscoRunCommandRunner as CommandRunner
-from cloudshell.networking.cisco.runners.cisco_state_runner import CiscoStateRunner as StateRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_autoload_runner import \
+    CiscoIOSXRAutoloadRunner as AutoloadRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_firmware_runner import \
+    CiscoIOSXRFirmwareRunner as FirmwareRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_run_command_runner import \
+    CiscoIOSXRRunCommandRunner as CommandRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_state_runner import CiscoIOSXRStateRunner as StateRunner
 from cloudshell.networking.networking_resource_driver_interface import NetworkingResourceDriverInterface
 from cloudshell.shell.core.driver_utils import GlobalLock
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
@@ -19,6 +23,7 @@ from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterf
 
 class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriverInterface, GlobalLock):
     SUPPORTED_OS = ["IOS[ -]?XR|IOSXR"]
+    # SHELL_NAME = ""
     SHELL_NAME = "Cisco IOSXR Router 2 Gen"
 
     def __init__(self):

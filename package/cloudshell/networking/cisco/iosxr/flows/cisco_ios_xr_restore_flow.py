@@ -42,10 +42,8 @@ class CiscoIOSXRRestoreFlow(CiscoRestoreFlow):
                 if restore_method == "override":
                     with enable_session.enter_mode(self._cli_handler.config_mode) as config_session:
                         restore_action = CiscoIOSXRSystemActions(config_session, self._logger)
-                        load_result = restore_action.load(source_file=path, vrf=vrf_management_name)
-                        restore_action.validate_load_success(load_result)
-                        replace_result = restore_action.replace_config()
-                        restore_action.validate_replace_config_success(replace_result)
+                        restore_action.load(source_file=path, vrf=vrf_management_name)
+                        restore_action.replace_config()
             else:
                 restore_action.copy(source=path, destination=configuration_type, vrf=vrf_management_name,
                                     action_map=restore_action.prepare_action_map(path, configuration_type))
