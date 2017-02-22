@@ -6,8 +6,8 @@ from cloudshell.devices.driver_helper import get_logger_with_thread_id, get_api,
 from cloudshell.devices.standards.networking.configuration_attributes_structure import create_networking_resource_from_context
 from cloudshell.networking.cisco.runners.cisco_connectivity_runner import \
     CiscoConnectivityRunner as ConnectivityRunner
-from cloudshell.networking.cisco.iosxr.runners.cisco_nxos_configuration_runner import \
-    CiscoNXOSConfigurationRunner as ConfigurationRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_configuration_runner import \
+    CiscoIOSXRConfigurationRunner as ConfigurationRunner
 from cloudshell.networking.cisco.runners.cisco_autoload_runner import CiscoAutoloadRunner as AutoloadRunner
 from cloudshell.networking.cisco.runners.cisco_firmware_runner import CiscoFirmwareRunner as FirmwareRunner
 from cloudshell.networking.cisco.runners.cisco_run_command_runner import CiscoRunCommandRunner as CommandRunner
