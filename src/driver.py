@@ -24,7 +24,7 @@ from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterf
 class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriverInterface, GlobalLock):
     SUPPORTED_OS = ["IOS[ -]?XR|IOSXR"]
     # SHELL_NAME = ""
-    SHELL_NAME = "Cisco IOSXR Router 2 Gen"
+    SHELL_NAME = "Cisco IOSXR Router 2G"
 
     def __init__(self):
         super(CiscoIOSXRResourceDriver, self).__init__()
