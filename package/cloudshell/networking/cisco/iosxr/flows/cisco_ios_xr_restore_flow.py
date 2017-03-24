@@ -31,6 +31,6 @@ class CiscoIOSXRRestoreFlow(CiscoRestoreFlow):
                         restore_action = CiscoIOSXRSystemActions(config_session, self._logger)
                         restore_action.load(source_file=path, vrf=vrf_management_name)
                         restore_action.replace_config()
-            else:
-                restore_action.copy(source=path, destination=configuration_type, vrf=vrf_management_name,
-                                    action_map=restore_action.prepare_action_map(path, configuration_type))
+                else:
+                    restore_action.copy(source=path, destination=configuration_type, vrf=vrf_management_name,
+                                        action_map=restore_action.prepare_action_map(path, configuration_type))
