@@ -1,14 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from cloudshell.cli.command_mode_helper import CommandModeHelper
 from cloudshell.networking.cisco.cli.cisco_cli_handler import CiscoCliHandler
 from cloudshell.networking.cisco.cli.cisco_command_modes import EnableCommandMode, ConfigCommandMode
+from cloudshell.networking.cisco.iosxr.cli.cisco_iosxr_command_modes import CiscoIOSXRConfigCommandMode
 
 
 class CiscoIOSXRCliHandler(CiscoCliHandler):
     def __init__(self, cli, resource_config, logger, api):
         super(CiscoIOSXRCliHandler, self).__init__(cli, resource_config, logger, api)
+
+    @property
+    def config_mode(self):
+        return self.modes[CiscoIOSXRConfigCommandMode]
 
     def on_session_start(self, session, logger):
         """Send default commands to configure/clear session outputs
