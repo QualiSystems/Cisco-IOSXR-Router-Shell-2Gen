@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from cloudshell.networking.cisco.iosxr.cli.cisco_iosxr_cli_handler import CiscoIOSXRCliHandler
+from cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_add_vlan_flow import CiscoIOSXRAddVlanFlow
+from cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_remove_vlan_flow import CiscoIOSXRRemoveVlanFlow
 from cloudshell.networking.cisco.runners.cisco_connectivity_runner import CiscoConnectivityRunner
 
 
@@ -20,11 +22,10 @@ class CiscoIOSXRConnectivityRunner(CiscoConnectivityRunner):
     def cli_handler(self):
         return CiscoIOSXRCliHandler(self.cli, self.resource_config, self._logger, self.api)
 
-    # ToDo left as reminder for future connectivity implementation
-    # @property
-    # def add_vlan_flow(self):
-    #     return CiscoAddVlanFlow(self.cli_handler, self._logger)
-    #
-    # @property
-    # def remove_vlan_flow(self):
-    #     return CiscoRemoveVlanFlow(self.cli_handler, self._logger)
+    @property
+    def add_vlan_flow(self):
+        return CiscoIOSXRAddVlanFlow(self.cli_handler, self._logger)
+
+    @property
+    def remove_vlan_flow(self):
+        return CiscoIOSXRRemoveVlanFlow(self.cli_handler, self._logger)

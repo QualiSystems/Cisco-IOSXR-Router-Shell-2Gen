@@ -1,7 +1,7 @@
 import re
 from cloudshell.cli.command_template.command_template_executor import CommandTemplateExecutor
 from cloudshell.networking.cisco.command_actions.system_actions import SystemActions
-from cloudshell.networking.cisco.iosxr.command_templates.cisco_ios_xr_cmd_templates import COMMIT_REPlACE, LOAD
+from cloudshell.networking.cisco.iosxr.command_templates.cisco_ios_xr_cmd_templates import COMMIT_REPlACE, LOAD, COMMIT
 
 
 class CiscoIOSXRSystemActions(SystemActions):
@@ -39,4 +39,6 @@ class CiscoIOSXRSystemActions(SystemActions):
             raise Exception('validate_replace_config_success', 'load error: ' + error_str)
         return commit_result
 
+    def commit(self, action_map=None, error_map=None):
+        CommandTemplateExecutor(self._cli_service, COMMIT).execute_command(action_map=action_map, error_map=error_map)
 

@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from cloudshell.networking.cisco.flows.cisco_restore_flow import CiscoRestoreFlow
-from cloudshell.networking.cisco.iosxr.cisco_ios_xr_system_actions import CiscoIOSXRSystemActions
+from cloudshell.networking.cisco.iosxr.command_actions.cisco_iosxr_system_actions import CiscoIOSXRSystemActions
 
 
 class CiscoIOSXRRestoreFlow(CiscoRestoreFlow):

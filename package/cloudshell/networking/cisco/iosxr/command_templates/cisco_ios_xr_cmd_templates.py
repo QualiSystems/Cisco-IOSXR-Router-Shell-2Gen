@@ -11,3 +11,8 @@ LOAD = CommandTemplate(command="load {source_file} [vrf {vrf}]", action_map=Orde
     'overwrit+e': lambda session, logger: session.send_line('yes', logger),
     'Do you wish to proceed': lambda session, logger: session.send_line('yes', logger)
 }))
+
+COMMIT = CommandTemplate(command="commit", action_map=OrderedDict({
+    '[\[\(][Nn]o[\)\]]': lambda session, logger: session.send_line('yes', logger),
+    '\[confirm\]': lambda session, logger: session.send_line('', logger)}),
+    error_map=OrderedDict({"% Failed to commit": "Failed to commit changes"}))
