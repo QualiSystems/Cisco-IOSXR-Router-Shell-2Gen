@@ -5,7 +5,8 @@ COMMIT_REPlACE = CommandTemplate(command="commit replace", action_map=OrderedDic
     '[\[\(][Nn]o[\)\]]|\[confirm\]': lambda session, logger: session.send_line('yes', logger)}))
 
 LOAD = CommandTemplate(command="load {source_file} [vrf {vrf}]", action_map=OrderedDict({
-    '[\[\(][Yy]es/[Nn]o[\)\]]|\[confirm\]': lambda session, logger: session.send_line('yes', logger),
+    '[\[\(][Yy]es/[Nn]o[\)\]]': lambda session, logger: session.send_line('yes', logger),
+    '\[confirm\]': lambda session, logger: session.send_line("", logger),
     '\(y\/n\)': lambda session, logger: session.send_line('y', logger),
     '[\[\(][Yy]/[Nn][\)\]]': lambda session, logger: session.send_line('y', logger),
     'overwrit+e': lambda session, logger: session.send_line('yes', logger),

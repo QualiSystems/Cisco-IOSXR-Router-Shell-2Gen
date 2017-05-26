@@ -252,6 +252,7 @@ class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriver
     @GlobalLock.lock
     def load_firmware(self, context, path, vrf_management_name):
         """Upload and updates firmware on the resource
+
         :param ResourceCommandContext context: ResourceCommandContext object with all Resource Attributes inside
         :param path: full path to firmware file, i.e. tftp://10.10.10.1/firmware.tar
         :param vrf_management_name: VRF management Name
