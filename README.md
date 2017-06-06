@@ -1,5 +1,5 @@
 # Cisco-IOSXR-Router-Shell-2Gen
-![alt tag](https://travis-ci.org/QualiSystems/Cisco-IOSXR-Router-Shell-2G.svg)
+[![Build status](https://travis-ci.org/QualiSystems/Cisco-IOSXR-Router-Shell-2G.svg?branch=dev)](https://travis-ci.org/QualiSystems/Cisco-IOSXR-Router-Shell-2G)
 [![Coverage Status](https://coveralls.io/repos/github/QualiSystems/Cisco-IOSXR-Router-Shell-2G/badge.svg)](https://coveralls.io/github/QualiSystems/Cisco-IOSXR-Router-Shell-2G)
 [![PyPI version](https://badge.fury.io/py/cloudshell-networking-cisco-iosxr.svg)](https://badge.fury.io/py/cloudshell-networking-cisco-iosxr)
 [![Dependency Status](https://dependencyci.com/github/QualiSystems/Cisco-IOSXR-Router-Shell-2G/badge)](https://dependencyci.com/github/QualiSystems/Cisco-IOSXR-Router-Shell-2G)
