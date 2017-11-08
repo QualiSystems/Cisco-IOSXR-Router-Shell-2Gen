@@ -1,2 +1,2 @@
-cloudshell-networking-cisco-iosxr>=3.0,<3.1
-cloudshell-networking-cisco>=5.0,<5.1
+cloudshell-networking-cisco-iosxr>=3.1,<3.2
+cloudshell-networking-cisco>=5.1,<5.2

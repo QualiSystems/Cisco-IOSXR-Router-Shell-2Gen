@@ -8,14 +8,14 @@ Tests for `CiscoIOSXRResourceDriver`
 import unittest
 from mock import patch
 
-from cloudshell.shell.core.context import ResourceCommandContext
+from cloudshell.shell.core.driver_context import ResourceCommandContext
 from src.driver import CiscoIOSXRResourceDriver
 
 
 @patch('src.driver.get_api')
 @patch('src.driver.get_logger_with_thread_id')
 @patch('src.driver.create_networking_resource_from_context')
-@patch('cloudshell.shell.core.context.ResourceCommandContext', autospec=ResourceCommandContext)
+@patch('cloudshell.shell.core.driver_context.ResourceCommandContext', autospec=ResourceCommandContext)
 class TestCiscoIOSXRShellDriver(unittest.TestCase):
     def setUp(self):
         self.driver = CiscoIOSXRResourceDriver()
@@ -50,7 +50,7 @@ class TestCiscoIOSXRShellDriver(unittest.TestCase):
 
         # Assert
         self.assertTrue(response, result)
-        mocked_class.return_value.run_custom_command.assert_called_with(custom_command=command)
+        mocked_class.return_value.run_custom_command.assert_called_with(custom_command=[command])
 
     @patch('src.driver.StateRunner')
     def test_health_check(self, mocked_class, mocked_context, mocked_resource_details, mocked_logger, mocked_api):
@@ -77,7 +77,7 @@ class TestCiscoIOSXRShellDriver(unittest.TestCase):
 
         # Assert
         self.assertTrue(response, result)
-        mocked_class.return_value.run_custom_config_command.assert_called_with(custom_command=command)
+        mocked_class.return_value.run_custom_config_command.assert_called_with(custom_command=[command])
 
     @patch('src.driver.FirmwareRunner')
     def test_load_firmware(self, mocked_class, mocked_context, mocked_resource_details, mocked_logger, mocked_api):
