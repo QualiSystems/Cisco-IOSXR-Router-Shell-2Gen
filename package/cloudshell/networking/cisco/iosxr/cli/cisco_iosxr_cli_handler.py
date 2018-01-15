@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from cloudshell.cli.cli_service_impl import CliServiceImpl
 
 from cloudshell.networking.cisco.cli.cisco_cli_handler import CiscoCliHandler
 from cloudshell.networking.cisco.cli.cisco_command_modes import EnableCommandMode, ConfigCommandMode
@@ -7,9 +8,6 @@ from cloudshell.networking.cisco.iosxr.cli.cisco_iosxr_command_modes import Cisc
 
 
 class CiscoIOSXRCliHandler(CiscoCliHandler):
-    def __init__(self, cli, resource_config, logger, api):
-        super(CiscoIOSXRCliHandler, self).__init__(cli, resource_config, logger, api)
-
     @property
     def config_mode(self):
         return self.modes[CiscoIOSXRConfigCommandMode]
@@ -19,10 +17,8 @@ class CiscoIOSXRCliHandler(CiscoCliHandler):
         :return:
         """
 
-        self._enter_enable_mode(session=session, logger=logger)
-        session.hardware_expect("terminal length 0", EnableCommandMode.PROMPT, logger)
-        session.hardware_expect("terminal width 300", EnableCommandMode.PROMPT, logger)
-        self._enter_config_mode(session, logger)
-        session.hardware_expect("no logging console", ConfigCommandMode.PROMPT, logger)
-        session.hardware_expect("commit", ConfigCommandMode.PROMPT, logger)
-        session.hardware_expect("exit", EnableCommandMode.PROMPT, logger)
+        cli_service = CliServiceImpl(session=session, command_mode=self.enable_mode, logger=logger)
+        cli_service.send_command("terminal length 0", EnableCommandMode.PROMPT)
+        cli_service.send_command("terminal width 300", EnableCommandMode.PROMPT)
+        with cli_service.enter_mode(self.config_mode) as config_session:
+            config_session.send_command("no logging console", ConfigCommandMode.PROMPT)
