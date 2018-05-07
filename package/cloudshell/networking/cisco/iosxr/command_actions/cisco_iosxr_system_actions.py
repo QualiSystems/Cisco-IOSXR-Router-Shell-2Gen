@@ -15,7 +15,7 @@ class CiscoIOSXRSystemActions(SystemActions):
         else:
             load_result = load_cmd.execute_command(source_file=source_file)
 
-        match_success = re.search(r"[\[\(][1-9][0-9]*[\)\]].*bytes", load_result, re.IGNORECASE | re.MULTILINE)
+        match_success = re.search(r"[\[\(][1-9][0-9]*[\)\]].*bytes|^([1-9][0-9]*)+\s*bytes\s*(parsed|process+ed)", load_result, re.IGNORECASE | re.MULTILINE)
         if not match_success:
             error_str = "Failed to restore configuration, please check logs"
             match_error = re.search(r" Can't assign requested address|[Ee]rror:.*\n|%.*$",
