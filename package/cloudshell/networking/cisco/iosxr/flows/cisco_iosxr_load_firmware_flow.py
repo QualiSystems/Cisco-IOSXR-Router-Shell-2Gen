@@ -164,7 +164,12 @@ class CiscoIOSXRLoadFirmwareFlow(CiscoLoadFirmwareFlow):
                     self._result_dict[package_name] = "Package is already installed, skipping."
                 continue
             if match_dict.get("type").lower() == "info":
-                if not self._packages_to_add or package_name in self._packages_to_add:
+                if not self._packages_to_add:
                     if match_dict.get("message").lower() not in _pkgs_to_add:
                         _pkgs_to_add.append(match_dict.get("message"))
+                else:
+                    for package in self._packages_to_add:
+                        if package.lower() in package_name.lower():
+                            if match_dict.get("message").lower() not in _pkgs_to_add:
+                                _pkgs_to_add.append(match_dict.get("message"))
         return _pkgs_to_add
