@@ -56,6 +56,7 @@ class CiscoIOSXRAdminSystemActions(object):
     RESTART_TIMEOUT = 600
     SHOW_REQUEST_TIMEOUT = 30
     INSTALL_COMMIT_TIMEOUT = 20
+    INSTALL_ADD_SOURCE_TIMEOUT = 3000
 
     def __init__(self, cli_service, logger):
         self._cli_service = cli_service
@@ -64,7 +65,7 @@ class CiscoIOSXRAdminSystemActions(object):
     def install_add_source(self, path, file_name, file_extension=None, admin=None, sync=None, action_map=None,
                            error_map=None):
         return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.INSTALL_ADD_SRC, action_map=action_map,
-                                       error_map=error_map, timeout=3000).execute_command(path=path,
+                                       error_map=error_map, timeout=self.INSTALL_ADD_SOURCE_TIMEOUT).execute_command(path=path,
                                                                                           file_extension=file_extension,
                                                                                           file_name=file_name,
                                                                                           admin=admin, sync=sync)
@@ -107,22 +108,24 @@ class CiscoIOSXRAdminSystemActions(object):
                                        error_map=error_map).execute_command(operation_id=operation_id)
 
     def show_install_request(self, operation_id, action_map=None, error_map=None):
-        retry = 1
+        retry = 0
         result = ""
         while re.search(r"operation {} is \d+% complete".format(operation_id), result,
                         re.IGNORECASE) or retry < self.SHOW_REQUEST_MAX_RETRY:
-            if re.search(r"No install operation in progress", result,
-                         re.IGNORECASE):
-                return True
-            time.sleep(self.SHOW_REQUEST_TIMEOUT)
             try:
                 result = CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_INSTALL_REQUEST,
                                                  action_map=action_map,
                                                  error_map=error_map).execute_command()
+                if re.search(r"No install operation in progress", result,
+                             re.IGNORECASE):
+                    return True
             except:
                 self._cli_service.reconnect(self.RESTART_TIMEOUT)
+
             if not re.search(r"operation {} is \d+% complete".format(operation_id), result, re.IGNORECASE):
                 retry += 1
+
+            time.sleep(self.SHOW_REQUEST_TIMEOUT)
 
     def prepare_output(self, result_dict):
         return "\n".join(["{}: {}".format(key, value) for key, value in result_dict.iteritems()])
