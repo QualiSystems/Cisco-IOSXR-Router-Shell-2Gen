@@ -18,27 +18,39 @@ COMMIT = CommandTemplate(command="commit", action_map=OrderedDict({
     '\[confirm\]': lambda session, logger: session.send_line('', logger)}),
                          error_map=OrderedDict({"% Failed to commit": "Failed to commit changes"}))
 
-INSTALL_ADD_SRC = CommandTemplate(command="install add source {path} [{file_extension}] {file_name} [vrf {vrf}] synchronous",
-                                  error_map=OrderedDict({"operation \d+ failed": "Failed to load firmware"}))
+INSTALL_ADD_SRC = CommandTemplate(
+    command="[{admin}admin] install add source {path} [{file_extension}] {file_name} [synchronous{sync}]",
+    error_map=OrderedDict({"operation \d+ (failed|aborted)": "Failed to load firmware", "([Ee]rror|ERROR):":
+        "Install operation failed, please check logs, for detials."}))
 
 SHOW_INSTALL_REPO = CommandTemplate(command="show install repository",
                                     error_map=OrderedDict([("[Ii]nvalid\s*([Ii]nput|[Cc]ommand)|[Cc]ommand rejected",
                                                             "'show install repository' command is not supported")]))
 
-INSTALL_ACTIVATE = CommandTemplate(command="install activate {feature_names} synchronous",
+SHOW_INSTALL_LOG = CommandTemplate(command="show install log {operation_id}",
+                                   error_map=OrderedDict([("[Ii]nvalid\s*([Ii]nput|[Cc]ommand)|[Cc]ommand rejected",
+                                                           "'show install repository' command is not supported"),
+                                                          ("([Ee]rror|ERROR):|operation \d+ (failed|aborted)",
+                                                           "Install operation failed, please check logs, for detials.")
+                                                          ]))
+
+INSTALL_ACTIVATE = CommandTemplate(command="[admin{admin}] install activate {feature_names} [synchronous{sync}]",
                                    action_map=OrderedDict({
                                        '[\[\(][Yy]es/[Nn]o[\)\]]': lambda session, logger: session.send_line('yes',
-                                                                                                             logger)}),
-                                   error_map=OrderedDict({"operation \d+ failed": "Failed to load firmware",
+                                                                                                             logger),
+                                       '[\[\(][Yy]/[Nn][\)\]]': lambda session, logger: session.send_line('y',
+                                                                                                          logger)
+                                   }),
+                                   error_map=OrderedDict({"operation \d+ (failed|aborted)": "Failed to load firmware",
                                                           "Error:.*$": "Failed to load firmware"}))
 
-SHOW_PIE_INFO = CommandTemplate(command="show install pie-info {path}")
-
-INSTALL_COMMIT = CommandTemplate(command="install commit",
+INSTALL_COMMIT = CommandTemplate(command="[admin{admin}] install commit",
                                  action_map=OrderedDict({
                                      '[\[\(][Yy]es/[Nn]o[\)\]]': lambda session, logger: session.send_line('yes',
                                                                                                            logger)}),
-                                 error_map=OrderedDict({"operation \d+ failed": "Failed to load firmware"}))
+                                 error_map=OrderedDict({"operation \d+ (failed|aborted)": "Failed to load firmware"}))
+
+SHOW_INSTALL_REQUEST = CommandTemplate(command="show install request")
 
 SHOW_INSTALL_ACTIVE = CommandTemplate(command="show install active")
 

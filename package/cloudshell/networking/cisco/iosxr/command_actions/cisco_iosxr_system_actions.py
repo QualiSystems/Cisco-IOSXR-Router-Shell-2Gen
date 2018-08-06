@@ -1,4 +1,7 @@
 import re
+
+import time
+
 from cloudshell.cli.command_template.command_template_executor import CommandTemplateExecutor
 from cloudshell.cli.session.session_exceptions import SessionException
 from cloudshell.networking.cisco.command_actions.system_actions import SystemActions
@@ -49,30 +52,44 @@ class CiscoIOSXRSystemActions(SystemActions):
 
 
 class CiscoIOSXRAdminSystemActions(object):
+    SHOW_REQUEST_MAX_RETRY = 10
+    RESTART_TIMEOUT = 600
+    SHOW_REQUEST_TIMEOUT = 30
+    INSTALL_COMMIT_TIMEOUT = 20
+
     def __init__(self, cli_service, logger):
         self._cli_service = cli_service
         self._logger = logger
 
-    def get_available_remote_packages(self, available_pkgs, is_old_iosxr=False):
-        return []
-
-    def install_add_source(self, path, file_name, file_extension, vrf=None, action_map=None, error_map=None):
+    def install_add_source(self, path, file_name, file_extension=None, admin=None, sync=None, action_map=None,
+                           error_map=None):
         return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.INSTALL_ADD_SRC, action_map=action_map,
-                                       error_map=error_map, timeout=600).execute_command(path=path,
-                                                                                         file_extension=file_extension,
-                                                                                         file_name=file_name, vrf=vrf)
+                                       error_map=error_map, timeout=3000).execute_command(path=path,
+                                                                                          file_extension=file_extension,
+                                                                                          file_name=file_name,
+                                                                                          admin=admin, sync=sync)
 
-    def install_activate(self, feature_names, action_map=None, error_map=None):
+    def install_activate(self, feature_names, admin=None, action_map=None, error_map=None):
         return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.INSTALL_ACTIVATE, action_map=action_map,
-                                       error_map=error_map).execute_command(feature_names=" ".join(feature_names))
+                                       error_map=error_map).execute_command(feature_names=" ".join(feature_names),
+                                                                            admin=admin)
 
     def show_install_repository(self, action_map=None, error_map=None):
         return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_INSTALL_REPO, action_map=action_map,
                                        error_map=error_map).execute_command()
 
-    def install_commit(self, action_map=None, error_map=None):
-        return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.INSTALL_COMMIT, action_map=action_map,
-                                       error_map=error_map).execute_command()
+    def install_commit(self, admin=None, timeout=0, action_map=None, error_map=None):
+        result = ""
+        if not timeout:
+            timeout = self.RESTART_TIMEOUT
+        try:
+            result = CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.INSTALL_COMMIT,
+                                             action_map=action_map,
+                                             error_map=error_map).execute_command(admin=admin)
+            time.sleep(self.INSTALL_COMMIT_TIMEOUT)
+        except SessionException:
+            self._cli_service.reconnect(timeout)
+        return result
 
     def show_install_active(self, action_map=None, error_map=None):
         return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_INSTALL_ACTIVE,
@@ -84,8 +101,28 @@ class CiscoIOSXRAdminSystemActions(object):
                                        action_map=action_map,
                                        error_map=error_map).execute_command()
 
-    def show_install_pie_info(self, path, action_map=None, error_map=None):
-        return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_PIE_INFO,
+    def retrieve_install_log(self, operation_id, action_map=None, error_map=None):
+        return CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_INSTALL_LOG,
                                        action_map=action_map,
-                                       error_map=error_map).execute_command(path=path)
+                                       error_map=error_map).execute_command(operation_id=operation_id)
 
+    def show_install_request(self, operation_id, action_map=None, error_map=None):
+        retry = 1
+        result = ""
+        while re.search(r"operation {} is \d+% complete".format(operation_id), result,
+                        re.IGNORECASE) or retry < self.SHOW_REQUEST_MAX_RETRY:
+            if re.search(r"No install operation in progress", result,
+                         re.IGNORECASE):
+                return True
+            time.sleep(self.SHOW_REQUEST_TIMEOUT)
+            try:
+                result = CommandTemplateExecutor(self._cli_service, ios_xr_cmd_templates.SHOW_INSTALL_REQUEST,
+                                                 action_map=action_map,
+                                                 error_map=error_map).execute_command()
+            except:
+                self._cli_service.reconnect(self.RESTART_TIMEOUT)
+            if not re.search(r"operation {} is \d+% complete".format(operation_id), result, re.IGNORECASE):
+                retry += 1
+
+    def prepare_output(self, result_dict):
+        return "\n".join(["{}: {}".format(key, value) for key, value in result_dict.iteritems()])
