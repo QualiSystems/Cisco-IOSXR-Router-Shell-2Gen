@@ -73,7 +73,7 @@ class CiscoIOSXRLoadFirmwareFlow(CiscoLoadFirmwareFlow):
 
         active_pkgs = admin_actions.show_install_active()
         for pkg in pkgs_for_install:
-            package_name = re.sub("^.*:", "", pkg)
+            package_name = re.sub("^.*:|.x86_64$", "", pkg)
             if package_name not in active_pkgs:
                 self._result_dict[package_name] = "Failed to install package, please see logs for details."
             else:
@@ -115,8 +115,8 @@ class CiscoIOSXRLoadFirmwareFlow(CiscoLoadFirmwareFlow):
         else:
             operation_id = self._get_operation_id(output)
             log = admin_actions.retrieve_install_log(operation_id)
-            for line in re.finditer("\S+\d+(\S+\d+)+$", log, re.MULTILINE):
-                available_packages.append(line.group())
+            for line in re.finditer("\s\s+(\S+\d+(\S+\d*)+)", log, re.MULTILINE):
+                available_packages.append(line.group().strip(" \n\t\r"))
 
             if not available_packages:
                 raise Exception("Failed to load firmware: no new packages available for installation (activation)")
