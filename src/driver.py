@@ -12,15 +12,14 @@ from cloudshell.devices.driver_helper import parse_custom_commands
 from cloudshell.networking.cisco.snmp.cisco_snmp_handler import CiscoSnmpHandler as SNMPHandler
 from cloudshell.networking.cisco.runners.cisco_autoload_runner import \
     CiscoAutoloadRunner as AutoloadRunner
-from cloudshell.networking.cisco.runners.cisco_firmware_runner import \
-    CiscoFirmwareRunner as FirmwareRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_firmware_runner import \
+    CiscoIOSXRFirmwareRunner as FirmwareRunner
 
 from cloudshell.devices.runners.run_command_runner import RunCommandRunner as CommandRunner
 from cloudshell.devices.runners.state_runner import StateRunner as StateRunner
 from cloudshell.networking.networking_resource_driver_interface import NetworkingResourceDriverInterface
 from cloudshell.shell.core.driver_utils import GlobalLock
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-
 
 
 class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriverInterface, GlobalLock):
@@ -269,11 +268,12 @@ class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriver
         logger.info('Orchestration restore completed')
 
     @GlobalLock.lock
-    def load_firmware(self, context, path, vrf_management_name):
+    def load_firmware(self, context, path, features_to_install="", vrf_management_name=None):
         """Upload and updates firmware on the resource
 
         :param ResourceCommandContext context: ResourceCommandContext object with all Resource Attributes inside
         :param path: full path to firmware file, i.e. tftp://10.10.10.1/firmware.tar
+        :param features_to_install:
         :param vrf_management_name: VRF management Name
         """
 
@@ -290,9 +290,13 @@ class CiscoIOSXRResourceDriver(ResourceDriverInterface, NetworkingResourceDriver
         cli_handler = CliHandler(self._cli, resource_config, logger, api)
 
         logger.info('Start Load Firmware')
-        firmware_operations = FirmwareRunner(cli_handler=cli_handler, logger=logger)
-        response = firmware_operations.load_firmware(path=path, vrf_management_name=vrf_management_name)
+        firmware_operations = FirmwareRunner(cli_handler=cli_handler,
+                                             logger=logger,
+                                             features_to_install=features_to_install)
+        response = firmware_operations.load_firmware(path=path,
+                                                     vrf_management_name=vrf_management_name)
         logger.info('Finish Load Firmware: {}'.format(response))
+        return response
 
     def health_check(self, context):
         """Performs device health check

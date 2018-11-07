@@ -43,10 +43,32 @@ class CiscoIOSXRConfigCommandMode(CommandMode):
         return OrderedDict()
 
 
+class CiscoIOSXRAdminCommandMode(CommandMode):
+    PROMPT = r'(\(admin.*\)|sysadmin.*)#\s*$'
+    ENTER_COMMAND = 'admin'
+    EXIT_COMMAND = 'exit'
+
+    def __init__(self, resource_config, api):
+        """
+        Initialize Config command mode
+
+        :param resource_config:
+        """
+
+        exit_action_map = {
+            self.PROMPT: lambda session, logger: session.send_line('exit', logger)}
+        CommandMode.__init__(self,
+                             CiscoIOSXRAdminCommandMode.PROMPT,
+                             CiscoIOSXRAdminCommandMode.ENTER_COMMAND,
+                             CiscoIOSXRAdminCommandMode.EXIT_COMMAND,
+                             exit_action_map=exit_action_map)
+
+
 CommandMode.RELATIONS_DICT = {
     DefaultCommandMode: {
         EnableCommandMode: {
-            CiscoIOSXRConfigCommandMode: {}
+            CiscoIOSXRConfigCommandMode: {},
+            CiscoIOSXRAdminCommandMode: {}
         }
     }
 }

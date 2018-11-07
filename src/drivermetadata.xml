@@ -88,6 +88,9 @@
             <Parameters>
                 <Parameter Name="path" Type="String" Mandatory="True" DisplayName="Path" DefaultValue=""
                            Description="The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use 'tftp://server_address/folder1/file1.bin', for FTP use 'ftp://username:password@server_address/folder1/file1.bin'."/>
+                <Parameter Name="features_to_install" Type="String" Mandatory="False" DisplayName="Features to Install"
+                           DefaultValue=""
+                           Description="Optional. Firmware and/or features names separated by space, i.e. ncs5500-mini-x-6.2.25 ncs5500-isis-2.2.0.0-r6225.x86_64 ncs5500-k9sec-3.2.0.0-r6225.x86_64."/>
                 <Parameter Name="vrf_management_name" Type="String" Mandatory="False" DisplayName="VRF Management Name"
                            DefaultValue=""
                            Description="Optional. Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the 'VRF Management Name' attribute on the root model will be used."/>
