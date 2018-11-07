@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from mock import MagicMock, patch
 
 from cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow import CiscoIOSXRLoadFirmwareFlow
@@ -8,13 +9,16 @@ class TestCiscoIOSXRLoadFirmwareFlow(TestCase):
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._filter_packages_for_install",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._filter_packages_for_install",
         return_value=["package"])
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._install_add_source")
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._install_add_source")
     def test_execute_flow(self, add_src_mock, filter_mock, get_id_mock, sys_actions_mock):
         # Setup
         password = "pass"
@@ -40,13 +44,16 @@ class TestCiscoIOSXRLoadFirmwareFlow(TestCase):
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._filter_packages_for_install",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._filter_packages_for_install",
         return_value=["package"])
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._install_add_source")
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._install_add_source")
     def test_execute_flow(self, add_src_mock, filter_mock, get_id_mock, sys_actions_mock):
         # Setup
         password = "pass"
@@ -85,7 +92,8 @@ class TestCiscoIOSXRLoadFirmwareFlow(TestCase):
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     def test_install_add_source(self, operation_id_mock, sys_actions_mock):
         # Setup
@@ -134,87 +142,101 @@ class TestCiscoIOSXRLoadFirmwareFlow(TestCase):
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
         return_value=1)
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     def test_filter_packages_for_install(self, operation_id_mock, get_pkgs_mock, sys_actions_mock):
         # Setup
         output = "The install operation 1 is 4% complete"
-        pkg = "ncs5500-mgbl-3.0.0.0-r6225"
+        pkg = "Aug 16 15:10:19     ncs5500-mgbl-3.0.0.0-r6225"
+        pkg_result = "ncs5500-mgbl-3.0.0.0-r6225"
         firmware_flow = CiscoIOSXRLoadFirmwareFlow(MagicMock(), MagicMock(), "")
         sh_install_log_mock = MagicMock(return_value=pkg)
         sys_actions_mock.retrieve_install_log = sh_install_log_mock
-        get_pkgs_mock.return_value = [pkg]
+        get_pkgs_mock.return_value = [pkg_result]
 
         # Act
         result = firmware_flow._filter_packages_for_install(sys_actions_mock, output)
 
         # Assert
-        self.assertEqual([pkg], result)
-        get_pkgs_mock.assert_called_once_with([pkg])
+        self.assertEqual([pkg_result], result)
+        get_pkgs_mock.assert_called_once_with([pkg_result])
         sh_install_log_mock.assert_called_once_with(1)
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
         return_value=1)
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     def test_filter_packages_for_install_no_pkg(self, operation_id_mock, get_pkgs_mock, sys_actions_mock):
         # Setup
         output = "The install operation 1 is 4% complete"
-        pkg = """ncs5500-mgbl-3.0.0.0-r6225
-ncs5500-mpls-3.0.0.0-r6225
-ncs5500-k9-3.0.0.0-r6225
-ncs5500-auto-3.0.0.0-r6225
-ncs5500-dddd-3.0.0.0-r6225"""
+        pkg = """Aug 16 15:10:19     ncs5500-mgbl-4.0.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-k9sec-4.1.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-mini-x-6.3.2
+Aug 16 15:10:19     ncs5500-mcast-2.1.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-isis-1.3.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-mpls-2.1.0.0-r632.x86_64"""
+        expected_result = map(lambda x: x.strip(" \n\t\r"), pkg.replace("Aug 16 15:10:19     ", "").split("\n"))
+
         firmware_flow = CiscoIOSXRLoadFirmwareFlow(MagicMock(), MagicMock(), "")
         sh_install_log_mock = MagicMock(return_value=pkg)
         sys_actions_mock.retrieve_install_log = sh_install_log_mock
-        get_pkgs_mock.return_value = pkg.split("\n")
+        get_pkgs_mock.return_value = expected_result
 
         # Act
         result = firmware_flow._filter_packages_for_install(sys_actions_mock, output)
 
         # Assert
-        self.assertEqual(pkg.split("\n"), result)
-        get_pkgs_mock.assert_called_once_with(pkg.split("\n"))
+        # expected_result = map(lambda x: x.strip(" \n\t\r"), pkg.split("\n"))
+        self.assertEqual(expected_result, result)
+        get_pkgs_mock.assert_called_once_with(expected_result)
         sh_install_log_mock.assert_called_once_with(1)
-
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_packages_for_install",
         return_value=1)
     @patch(
-        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRLoadFirmwareFlow._get_operation_id",
+        "cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow."
+        "CiscoIOSXRLoadFirmwareFlow._get_operation_id",
         return_value=1)
     def test_filter_packages_for_install_pkg_installed(self, operation_id_mock, get_pkgs_mock, sys_actions_mock):
         # Setup
         output = "The install operation 1 is 4% complete"
-        pkg = "ncs5500-mpls-3.0.0.0-r6225"
-        pkg_output = """ncs5500-mgbl-3.0.0.0-r6225
-ncs5500-mpls-3.0.0.0-r6225
-ncs5500-k9-3.0.0.0-r6225
-ncs5500-auto-3.0.0.0-r6225
-ncs5500-dddd-3.0.0.0-r6225"""
+        pkg = "ncs5500-mpls-2.1.0.0-r632.x86_64"
+        pkg_output = """Aug 16 15:10:19     ncs5500-mgbl-4.0.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-k9sec-4.1.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-mini-x-6.3.2
+Aug 16 15:10:19     ncs5500-mcast-2.1.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-isis-1.3.0.0-r632.x86_64
+Aug 16 15:10:19     ncs5500-mpls-2.1.0.0-r632.x86_64"""
+        expected_result = map(lambda x: x.strip(" \n\t\r"), pkg_output.replace("Aug 16 15:10:19     ", "").split("\n"))
+
         firmware_flow = CiscoIOSXRLoadFirmwareFlow(MagicMock(), MagicMock(), "")
         sh_install_log_mock = MagicMock(return_value=pkg_output)
         sys_actions_mock.retrieve_install_log = sh_install_log_mock
-        get_pkgs_mock.return_value = pkg_output.split("\n")
-        sys_actions_mock.show_install_active.return_value = pkg_output.replace(pkg, "").split("\n")
+        get_pkgs_mock.return_value = [pkg]
+        sh_install_active = list(expected_result)
+        sh_install_active.remove(pkg)
+        sys_actions_mock.show_install_active.return_value = sh_install_active
 
         # Act
         result = firmware_flow._filter_packages_for_install(sys_actions_mock, output)
 
         # Assert
         self.assertEqual([pkg], result)
-        get_pkgs_mock.assert_called_once_with(pkg_output.split("\n"))
+        get_pkgs_mock.assert_called_once_with(expected_result)
         sh_install_log_mock.assert_called_once_with(1)
-
 
     @patch("cloudshell.networking.cisco.iosxr.flows.cisco_iosxr_load_firmware_flow.CiscoIOSXRAdminSystemActions")
     @patch(
@@ -225,7 +247,7 @@ ncs5500-dddd-3.0.0.0-r6225"""
         pkg_output = ["ncs5500-mgbl-3.0.0.0-r6225", "ncs5500-mpls-3.0.0.0-r6225", "ncs5500-dddd-3.0.0.0-r6225"]
         output = "The install operation 1 is 4% complete"
         firmware_flow = CiscoIOSXRLoadFirmwareFlow(MagicMock(), MagicMock(), "")
-        firmware_flow._is_old_iosxr =True
+        firmware_flow._is_old_iosxr = True
         get_pkgs_mock.return_value = pkg_output
 
         # Act
@@ -243,14 +265,15 @@ ncs5500-dddd-3.0.0.0-r6225"""
         # Setup
         output = "no new packages available to be activated"
         firmware_flow = CiscoIOSXRLoadFirmwareFlow(MagicMock(), MagicMock(), "")
-        firmware_flow._is_old_iosxr =True
+        firmware_flow._is_old_iosxr = True
 
         # Act
         try:
             firmware_flow._filter_packages_for_install(sys_actions_mock, output)
         except Exception as e:
             # Assert
-            self.assertEqual("Failed to load firmware: no new packages available to be installed (activated)", e.message)
+            self.assertEqual("Failed to load firmware: no new packages available to be installed (activated)",
+                             e.message)
 
     def test_get_packages_for_install(self):
         # Setup
@@ -261,7 +284,8 @@ ncs5500-dddd-3.0.0.0-r6225"""
         result = firmware_flow._get_packages_for_install(pkg_output)
         firmware_flow._packages_to_add = ["ncs5500-mgbl-3.0.0.0-r6225"]
         result1 = firmware_flow._get_packages_for_install(pkg_output)
-        firmware_flow._packages_to_add = ["ncs5500-mgbl-3.0.0.0-r6225", "ncs5500-mpls-3.0.0.0-r6225", "ncs5500-fff-3.0.0.0-r6225"]
+        firmware_flow._packages_to_add = ["ncs5500-mgbl-3.0.0.0-r6225", "ncs5500-mpls-3.0.0.0-r6225",
+                                          "ncs5500-fff-3.0.0.0-r6225"]
         result2 = firmware_flow._get_packages_for_install(pkg_output)
 
         # Assert
@@ -293,7 +317,8 @@ Install operation 14 completed successfully at 16:57:32 CEST Tue Jun 19 2018.
         result = firmware_flow._get_legacy_packages_for_install(pkg_output)
         firmware_flow._packages_to_add = ["asr9k-px-5.3.4.CSCvi52005-1.0.0"]
         result1 = firmware_flow._get_legacy_packages_for_install(pkg_output)
-        firmware_flow._packages_to_add = ["ncs5500-mgbl-3.0.0.0-r6225", "ncs5500-mpls-3.0.0.0-r6225", "ncs5500-fff-3.0.0.0-r6225"]
+        firmware_flow._packages_to_add = ["ncs5500-mgbl-3.0.0.0-r6225", "ncs5500-mpls-3.0.0.0-r6225",
+                                          "ncs5500-fff-3.0.0.0-r6225"]
         result2 = firmware_flow._get_legacy_packages_for_install(pkg_output)
 
         # Assert
