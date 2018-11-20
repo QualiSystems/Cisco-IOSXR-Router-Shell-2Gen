@@ -12,7 +12,7 @@ Release date: June 2017
 
 Shell version: 1.0.0
 
-Document version: 2.0.0
+Document version: 2.0
 
 # In This Guide
 
