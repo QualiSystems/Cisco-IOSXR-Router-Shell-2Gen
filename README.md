@@ -49,6 +49,8 @@ Release: **Cisco IOS-XR Router 2G Shell**
 
 ▪ Cisco OS: Cisco IOS-XR
 
+**Note:** If your CloudShell version does not support this shell, you should consider upgrading to a later version of CloudShell or contact customer support.
+
 ### Data Model
 
 The shell's data model includes all shell metadata, families, and attributes.
