@@ -263,3 +263,5 @@ To connect with Quali users and experts from around the world, ask questions and
 ### Known Issues
 
 * Shell doesn’t support slice architecture of NCS devices.
+* Due to the Physical Entity table design, all ports that are missing a SFP or GBIC transceiver will be skipped during **Autoload**.
+
