@@ -10,8 +10,8 @@ from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_configuration_runner 
 from cloudshell.devices.driver_helper import get_logger_with_thread_id, get_api, get_cli
 from cloudshell.devices.driver_helper import parse_custom_commands
 from cloudshell.networking.cisco.snmp.cisco_snmp_handler import CiscoSnmpHandler as SNMPHandler
-from cloudshell.networking.cisco.runners.cisco_autoload_runner import \
-    CiscoAutoloadRunner as AutoloadRunner
+from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_autoload_runner import \
+    CiscoIOSXRAutoloadRunner as AutoloadRunner
 from cloudshell.networking.cisco.iosxr.runners.cisco_iosxr_firmware_runner import \
     CiscoIOSXRFirmwareRunner as FirmwareRunner
 
